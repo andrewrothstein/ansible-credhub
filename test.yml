@@ -2,3 +2,8 @@
 - hosts: all
   roles:
   - role: '{{ playbook_dir }}'
+  tasks:
+  - command: /usr/local/bin/credhub --version
+    register: credhub_test_output
+  - debug:
+      msg: '{{ credhub_test_output.stdout }}'
