@@ -1,0 +1,56 @@
+---
+- name: resolve platform specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
+        - '{{ ansible_distribution }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      skip: true
+      paths:
+        - '{{ role_path }}/vars'
+- name: check for credhub-{{ credhub_ver }} install...
+  become: yes
+  stat:
+    path: '{{ credhub_install_dir }}'
+  changed_when: False
+  register: credhub_binary
+- when: not credhub_binary.stat.exists
+  block:
+    - name: downloading {{ credhub_url }}...
+      become: yes
+      become_user: root
+      get_url:
+        url: '{{ credhub_url }}'
+        dest: /tmp/{{ credhub_tgz }}
+        checksum: '{{ credhub_checksum }}'
+        mode: 0644
+    - name: mkdir {{ credhub_install_dir }}
+      become: yes
+      become_user: root
+      file:
+        path: '{{ credhub_install_dir }}'
+        state: directory
+        mode: 0755
+    - name: unarchiving /tmp/{{ credhub_tgz }}
+      become: yes
+      become_user: root
+      unarchive:
+        remote_src: yes
+        src: /tmp/{{ credhub_tgz }}
+        dest: '{{ credhub_install_dir }}'
+        creates: '{{ credhub_exe }}'
+  always:
+    - name: cleanup /tmp/{{ credhub_tgz }}
+      become: yes
+      become_user: root
+      file:
+        path: /tmp/{{ credhub_tgz }}
+        state: absent
+- name: link credhub
+  become: yes
+  become_user: root
+  file:
+    src: '{{ credhub_exe }}'
+    dest: '{{ credhub_link }}'
+    state: link

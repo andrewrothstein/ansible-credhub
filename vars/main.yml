@@ -1,0 +1,8 @@
+---
+# vars file for credhub
+credhub_tgz: credhub-{{ credhub_os }}-{{ credhub_ver }}.tgz
+credhub_url: '{{ credhub_mirror }}/{{ credhub_ver }}/{{ credhub_tgz }}'
+credhub_checksum: '{{ credhub_checksums[credhub_ver][credhub_os] }}'
+credhub_install_dir: '{{ credhub_parent_install_dir }}/credhub-{{ credhub_ver }}'
+credhub_exe: '{{ credhub_install_dir }}/credhub'
+credhub_link: '{{ credhub_parent_install_dir }}/bin/credhub'
