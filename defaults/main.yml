@@ -1,6 +1,6 @@
 ---
 # defaults file for credhub
-credhub_ver: 2.8.0
+credhub_ver: 2.9.0
 credhub_os: linux
 
 credhub_parent_install_dir: /usr/local
@@ -15,3 +15,10 @@ credhub_checksums:
     linux: sha256:dcd4f05eaaea6f356d8ffcbf2692c465b272fcdf773266589f4bc4a891cbe4e4
     # https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.8.0/credhub-windows-2.8.0.tgz
     windows: sha256:106bfd4f54fa2420a80d12cf998fc60a8985695006fe43584af8ba2b07f4403c
+  '2.9.0':
+    # https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.9.0/credhub-darwin-2.9.0.tgz
+    darwin: sha256:0fe74e42dea746f899a9b0e9e3c0b866c1f4825dfc83ae32d10c28b602aec3df
+    # https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.9.0/credhub-linux-2.9.0.tgz
+    linux: sha256:f260e926099f9eb9474ab2239851e391bfd0fd1354a52891f3c834cea1630e8a
+    # https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/2.9.0/credhub-windows-2.9.0.tgz
+    windows: sha256:369b3c5c8ea63f460d7a6e5012c3cc71a2d5403c1ef5ac8fa1e9122a05f5f531

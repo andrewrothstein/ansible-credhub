@@ -9,7 +9,7 @@
       skip: true
       paths:
         - '{{ role_path }}/vars'
-- name: check for credhub-{{ credhub_ver }} install...
+- name: checking for install in {{ credhub_install_dir }}
   become: yes
   stat:
     path: '{{ credhub_install_dir }}'
@@ -17,12 +17,12 @@
   register: credhub_binary
 - when: not credhub_binary.stat.exists
   block:
-    - name: downloading {{ credhub_url }}...
+    - name: downloading {{ credhub_url }} to {{ credhub_tmp_tgz }}
       become: yes
       become_user: root
       get_url:
         url: '{{ credhub_url }}'
-        dest: /tmp/{{ credhub_tgz }}
+        dest: '{{ credhub_tmp_tgz }}'
         checksum: '{{ credhub_checksum }}'
         mode: 0644
     - name: mkdir {{ credhub_install_dir }}
@@ -32,20 +32,20 @@
         path: '{{ credhub_install_dir }}'
         state: directory
         mode: 0755
-    - name: unarchiving /tmp/{{ credhub_tgz }}
+    - name: unarchiving {{ credhub_tmp_tgz }} to {{ credhub_install_dir }}
       become: yes
       become_user: root
       unarchive:
         remote_src: yes
-        src: /tmp/{{ credhub_tgz }}
+        src: '{{ credhub_tmp_tgz }}'
         dest: '{{ credhub_install_dir }}'
         creates: '{{ credhub_exe }}'
   always:
-    - name: cleanup /tmp/{{ credhub_tgz }}
+    - name: rm {{ credhub_tmp_tgz }}
       become: yes
       become_user: root
       file:
-        path: /tmp/{{ credhub_tgz }}
+        path: '{{ credhub_tmp_tgz }}'
         state: absent
 - name: link credhub
   become: yes
