@@ -1,5 +1,6 @@
 ---
 # vars file for credhub
+credhub_os: '{{ ansible_system | lower }}'
 credhub_tgz: credhub-{{ credhub_os }}-{{ credhub_ver }}.tgz
 credhub_tmp_tgz: /tmp/{{ credhub_tgz }}
 credhub_url: '{{ credhub_mirror }}/{{ credhub_ver }}/{{ credhub_tgz }}'

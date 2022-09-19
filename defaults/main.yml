@@ -1,7 +1,6 @@
 ---
 # defaults file for credhub
 credhub_ver: 2.9.4
-credhub_os: linux
 
 credhub_parent_install_dir: /usr/local
 
