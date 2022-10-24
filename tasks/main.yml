@@ -15,7 +15,7 @@
   become: true
   stat:
     path: '{{ credhub_install_dir }}'
-  changed_when: False
+  changed_when: false
   register: credhub_binary
 - when: not credhub_binary.stat.exists
   block:
