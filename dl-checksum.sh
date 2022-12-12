@@ -30,4 +30,4 @@ dl_ver() {
     dl $ver windows
 }
 
-dl_ver ${1:-2.9.8}
+dl_ver ${1:-2.9.9}
