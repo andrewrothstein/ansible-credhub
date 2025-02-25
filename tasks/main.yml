@@ -1,8 +1,9 @@
 ---
-- include_role:
-    name: andrewrothstein.unarchive-deps
-- name: resolve platform specific vars
-  include_vars: '{{ item }}'
+- name: Installing andrewrothstein.unarchivedeps
+  ansible.builtin.include_role:
+    name: andrewrothstein.unarchivedeps
+- name: Resolve platform specific vars
+  ansible.builtin.include_vars: '{{ item }}'
   with_first_found:
     - files:
         - '{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml'
@@ -11,48 +12,49 @@
       skip: true
       paths:
         - '{{ role_path }}/vars'
-- name: checking for install in {{ credhub_install_dir }}
+- name: Checking for install at {{ credhub_exe }}
   become: true
-  stat:
-    path: '{{ credhub_install_dir }}'
+  ansible.builtin.stat:
+    path: '{{ credhub_exe }}'
   changed_when: false
   register: credhub_binary
-- when: not credhub_binary.stat.exists
+- name: Downloading and installing credhub
+  when: not credhub_binary.stat.exists
   block:
-    - name: downloading {{ credhub_url }} to {{ credhub_tmp_tgz }}
+    - name: Downloading {{ credhub_url }} to {{ credhub_tmp_tgz }}
       become: true
       become_user: root
-      get_url:
+      ansible.builtin.get_url:
         url: '{{ credhub_url }}'
         dest: '{{ credhub_tmp_tgz }}'
         checksum: '{{ credhub_checksum }}'
-        mode: 0644
-    - name: mkdir {{ credhub_install_dir }}
+        mode: '644'
+    - name: Mkdir {{ credhub_install_dir }}
       become: true
       become_user: root
-      file:
+      ansible.builtin.file:
         path: '{{ credhub_install_dir }}'
         state: directory
-        mode: 0755
-    - name: unarchiving {{ credhub_tmp_tgz }} to {{ credhub_install_dir }}
+        mode: '755'
+    - name: Unarchiving {{ credhub_tmp_tgz }} to {{ credhub_install_dir }}
       become: true
       become_user: root
-      unarchive:
+      ansible.builtin.unarchive:
         remote_src: true
         src: '{{ credhub_tmp_tgz }}'
         dest: '{{ credhub_install_dir }}'
         creates: '{{ credhub_exe }}'
   always:
-    - name: rm {{ credhub_tmp_tgz }}
+    - name: Rm -f {{ credhub_tmp_tgz }}
       become: true
       become_user: root
-      file:
+      ansible.builtin.file:
         path: '{{ credhub_tmp_tgz }}'
         state: absent
-- name: link credhub
+- name: Linking {{ credhub_link }} to {{ credhub_exe }}
   become: true
   become_user: root
-  file:
+  ansible.builtin.file:
     src: '{{ credhub_exe }}'
     dest: '{{ credhub_link }}'
     state: link

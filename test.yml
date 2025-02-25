@@ -1,9 +1,13 @@
 ---
-- hosts: all
+- name: Testing andrewrothstein.credhub
+  hosts: all
   roles:
-  - role: '{{ playbook_dir }}'
+    - role: '{{ playbook_dir }}'
   tasks:
-  - command: /usr/local/bin/credhub --version
-    register: credhub_test_output
-  - debug:
-      msg: '{{ credhub_test_output.stdout }}'
+    - name: Executing 'credhub --version'
+      ansible.builtin.command: credhub --version
+      changed_when: false
+      register: credhub_test_output
+    - name: Output of 'credhub --version'
+      ansible.builtin.debug:
+        msg: '{{ credhub_test_output.stdout }}'
