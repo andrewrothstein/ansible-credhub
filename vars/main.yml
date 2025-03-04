@@ -1,10 +1,12 @@
 ---
 # vars file for credhub
 credhub_os: '{{ ansible_system | lower }}'
-credhub_tgz: credhub-{{ credhub_os }}-{{ credhub_ver }}.tgz
-credhub_tmp_tgz: /tmp/{{ credhub_tgz }}
+credhub_arch: '{{ credhub_arch_map[ansible_architecture] }}'
+credhub_platform: '{{ credhub_os }}-{{ credhub_arch }}'
+credhub_tgz: credhub-{{ credhub_platform }}-{{ credhub_ver }}.tgz
+credhub_tmp_tgz: '{{ credhub_tmp_dir | default("/tmp") }}/{{ credhub_tgz }}'
 credhub_url: '{{ credhub_mirror }}/{{ credhub_ver }}/{{ credhub_tgz }}'
-credhub_checksum: '{{ credhub_checksums[credhub_ver][credhub_os] }}'
-credhub_install_dir: '{{ credhub_parent_install_dir }}/credhub-{{ credhub_ver }}'
+credhub_checksum: '{{ credhub_checksums[credhub_ver][credhub_platform] }}'
+credhub_install_dir: '{{ credhub_parent_install_dir }}/credhub-{{ credhub_platform }}-{{ credhub_ver }}'
 credhub_exe: '{{ credhub_install_dir }}/credhub'
 credhub_link: '{{ credhub_parent_install_dir }}/bin/credhub'
